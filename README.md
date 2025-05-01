@@ -1,78 +1,32 @@
 # basic_sales_summary.py """
-Basic Sales Summary using SQLite and Python
--------------------------------------------
-This script demonstrates how to:
-- Create a tiny in-memory SQLite database
-- Insert sample sales data
-- Write SQL queries to summarize total quantity and revenue
-- Display results in the terminal
-- Show a bar chart of revenue by product
+# 🧾 Basic Sales Summary using SQLite and Python
 
-Author: Kanna
-"""
+This project demonstrates how to use an in-memory SQLite database in Python to analyze simple sales data.  
+You’ll learn to write SQL queries, summarize data, and visualize it using a basic bar chart.
 
-import sqlite3
-import matplotlib.pyplot as plt
+---
 
-# Step 1: Connect to SQLite database (in-memory)
-conn = sqlite3.connect(':memory:')  # Temporary database in RAM
-cursor = conn.cursor()
+## 📌 Features
 
-# Step 2: Create the sales table
-cursor.execute('''
-CREATE TABLE sales (
-    id INTEGER PRIMARY KEY,
-    product TEXT,
-    quantity INTEGER,
-    price REAL
-)
-''')
+- Create a SQLite database in memory
+- Insert sample sales data (products, quantity, price)
+- Run SQL queries to:
+  - Calculate total quantity sold
+  - Calculate total revenue per product
+- Display results in a terminal
+- Visualize total revenue by product using a bar chart
 
-# Step 3: Insert sample data into the table
-sample_data = [
-    ('Apple', 10, 0.50),
-    ('Banana', 5, 0.30),
-    ('Orange', 8, 0.40),
-    ('Apple', 7, 0.50),
-    ('Banana', 3, 0.30),
-    ('Orange', 6, 0.40),
-]
+---
 
-cursor.executemany('INSERT INTO sales (product, quantity, price) VALUES (?, ?, ?)', sample_data)
-conn.commit()
+## 🛠 Requirements
 
-# Step 4: Run SQL query to get total quantity and total revenue
-query = '''
-SELECT product,
-       SUM(quantity) AS total_quantity,
-       SUM(quantity * price) AS total_revenue
-FROM sales
-GROUP BY product
-'''
+- Python 3.x
+- `matplotlib` (for plotting)
 
-cursor.execute(query)
-results = cursor.fetchall()
+Install matplotlib using:
 
-# Step 5: Print results
-print("Sales Summary:")
-print("Product\tTotal Quantity\tTotal Revenue")
-for row in results:
-    print(f"{row[0]}\t{row[1]}\t\t${row[2]:.2f}")
-
-# Step 6: Plot a bar chart of revenue by product
-products = [row[0] for row in results]
-revenues = [row[2] for row in results]
-
-plt.bar(products, revenues, color='skyblue')
-plt.title('Total Revenue by Product')
-plt.xlabel('Product')
-plt.ylabel('Revenue ($)')
-plt.grid(axis='y', linestyle='--', alpha=0.7)
-plt.tight_layout()
-plt.show()
-
-# Step 7: Close the database connection
-conn.close()
+```bash
+pip install matplotlib
 
 
 
